@@ -36,3 +36,10 @@ example: (p -> q) -> ((q -> false) -> (p -> false)) :=
     fun hhp negq => -- We are given a function hhp which takes in hp and returns hq, AND we are given that hq returns false
         fun hp => -- We want a function that takes in ¬Q (a function which takes in hq and returns false) and outputs ¬P (a function that takes in hp and returns false)
             negq (hhp hp) -- Recall negq takes in q and returns False, so our goals are accomplished
+
+-- Proving Disjunctive Syllogism - ((P ∨ Q) ∧ ¬P) → Q
+example: ((p \/ q) /\ (p -> False)) -> q :=
+    fun ⟨ p_or_q, negp ⟩ => -- We have the or statement and the degation of p (which takes in p and returns false) - we must return hq
+        match p_or_q with
+            | Or.inr hq => hq -- If you have hq of type q, just return it
+            | Or.inl hp => False.elim (negp hp) -- Contradiction - feed hp to negp to get false and use False.Elim on it to get hq
